@@ -1,0 +1,50 @@
+We are currently working on 2 partitions.
+We are in partition number 0
+Partition begin: 0
+Partition end: 0.5
+Computing point0
+Computing point0.125
+Computing point0.25
+Computing point0.375
+Computing point0.5
+We are in partition number 1
+Partition begin: 0.5
+Partition end: 1
+Computing point0.5
+Computing point0.625
+Computing point0.75
+Computing point0.875
+Computing point1
+We are currently working on 4 partitions.
+We are in partition number 0
+Partition begin: 0
+Partition end: 0.25
+Computing point0
+Computing point0.0625
+Computing point0.125
+Computing point0.1875
+Computing point0.25
+We are in partition number 1
+Partition begin: 0.25
+Partition end: 0.5
+Computing point0.25
+Computing point0.3125
+Computing point0.375
+Computing point0.4375
+Computing point0.5
+We are in partition number 2
+Partition begin: 0.5
+Partition end: 0.75
+Computing point0.5
+Computing point0.5625
+Computing point0.625
+Computing point0.6875
+Computing point0.75
+We are in partition number 3
+Partition begin: 0.75
+Partition end: 1
+Computing point0.75
+Computing point0.8125
+Computing point0.875
+Computing point0.9375
+Computing point1
