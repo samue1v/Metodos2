@@ -26,10 +26,20 @@ Newton_Cotes::Newton_Cotes(double xi, double xf,int degree,double precision,int 
         case 4:
             __coefs = std::vector<double>({2.0/45.0,7,32,12,32,7});
         }
-        //computeClosed();
+        
     }
     else{
-        //computeOpen();
+        switch (__degree)
+        {
+        case 1:
+            __coefs = std::vector<double>({3.0/2.0,1,1});
+        case 2:
+            __coefs = std::vector<double>({4.0/3.0,2,-1,2});
+        case 3:
+            __coefs = std::vector<double>({5.0/24.0,11,1,1,11});
+        case 4:
+            __coefs = std::vector<double>({3.0/10.0,11,-14,26,-14,11});
+        }
     }
     /*
     if(approach){
@@ -86,8 +96,7 @@ double Newton_Cotes::computeClosed(){
             sum = sum*__coefs[0]*h;
             current_res += sum;
         }
-        //std::cout<<"Partitions: "<<partitions<<std::endl;
-        //std::cout<< "Res: " <<current_res<<std::endl;
+        Log<<std::endl;
 
     }
     Log.close();
@@ -104,20 +113,36 @@ double Newton_Cotes::computeClosed(){
 
 
 double Newton_Cotes::computeOpen(){
-    /*
+    std::ofstream Log("log.txt");
     int partitions = 1;
     int counter = 0;
     double current_res = INFINITY;
     double prev_res = 0;
     double lxi,lxf;
-    while(current_res - prev_res > __precision){
-        partitions << counter;
+    while(abs(current_res - prev_res) > __precision){
+        partitions = partitions << 1;
+        prev_res = current_res;
+        current_res = 0;
+        Log<<"We are currently working on " << partitions << " partitions." <<std::endl;
         for(int t = 0; t < partitions; t++){
-            lxi = __xi + ((__xf-__xi)/partitions)*t;
-            lxf = lxi + (__xf-__xi)/partitions;
-            double 
+            
+            double sum = 0;
+            lxi = __xi + ((__xf-__xi)/(double)partitions)*(double)t;
+            lxf = lxi + (__xf-__xi)/(double)partitions;
+            Log<<"We are in partition number " << t << std::endl;
+            Log<<"Partition begin: " << lxi << std::endl << "Partition end: " << lxf << std::endl;
+            double h = (lxf-lxi)/double(__degree + 2);
+            for(int v = 0;v<__degree+1;v++){
+                Log<<"Computing point" << lxi + h + (double)v*(h) << std::endl;
+                sum = sum + func((lxi + h + (double)v*(h)))*__coefs[v+1];
+            }
+            sum = sum*__coefs[0]*h;
+            current_res += sum;
         }
+        Log<<std::endl;
+        counter++;
 
     }
-    */
+    Log.close();
+    return current_res;
 }

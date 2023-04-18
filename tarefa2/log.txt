@@ -2,49 +2,117 @@ We are currently working on 2 partitions.
 We are in partition number 0
 Partition begin: 0
 Partition end: 0.5
-Computing point0
-Computing point0.125
+Computing point0.0833333
+Computing point0.166667
 Computing point0.25
-Computing point0.375
-Computing point0.5
+Computing point0.333333
+Computing point0.416667
 We are in partition number 1
 Partition begin: 0.5
 Partition end: 1
-Computing point0.5
-Computing point0.625
+Computing point0.583333
+Computing point0.666667
 Computing point0.75
-Computing point0.875
-Computing point1
+Computing point0.833333
+Computing point0.916667
+
 We are currently working on 4 partitions.
 We are in partition number 0
 Partition begin: 0
 Partition end: 0.25
-Computing point0
-Computing point0.0625
+Computing point0.0416667
+Computing point0.0833333
 Computing point0.125
-Computing point0.1875
-Computing point0.25
+Computing point0.166667
+Computing point0.208333
 We are in partition number 1
 Partition begin: 0.25
 Partition end: 0.5
-Computing point0.25
-Computing point0.3125
+Computing point0.291667
+Computing point0.333333
 Computing point0.375
-Computing point0.4375
-Computing point0.5
+Computing point0.416667
+Computing point0.458333
 We are in partition number 2
 Partition begin: 0.5
 Partition end: 0.75
-Computing point0.5
-Computing point0.5625
+Computing point0.541667
+Computing point0.583333
 Computing point0.625
-Computing point0.6875
-Computing point0.75
+Computing point0.666667
+Computing point0.708333
 We are in partition number 3
 Partition begin: 0.75
 Partition end: 1
-Computing point0.75
-Computing point0.8125
+Computing point0.791667
+Computing point0.833333
 Computing point0.875
+Computing point0.916667
+Computing point0.958333
+
+We are currently working on 8 partitions.
+We are in partition number 0
+Partition begin: 0
+Partition end: 0.125
+Computing point0.0208333
+Computing point0.0416667
+Computing point0.0625
+Computing point0.0833333
+Computing point0.104167
+We are in partition number 1
+Partition begin: 0.125
+Partition end: 0.25
+Computing point0.145833
+Computing point0.166667
+Computing point0.1875
+Computing point0.208333
+Computing point0.229167
+We are in partition number 2
+Partition begin: 0.25
+Partition end: 0.375
+Computing point0.270833
+Computing point0.291667
+Computing point0.3125
+Computing point0.333333
+Computing point0.354167
+We are in partition number 3
+Partition begin: 0.375
+Partition end: 0.5
+Computing point0.395833
+Computing point0.416667
+Computing point0.4375
+Computing point0.458333
+Computing point0.479167
+We are in partition number 4
+Partition begin: 0.5
+Partition end: 0.625
+Computing point0.520833
+Computing point0.541667
+Computing point0.5625
+Computing point0.583333
+Computing point0.604167
+We are in partition number 5
+Partition begin: 0.625
+Partition end: 0.75
+Computing point0.645833
+Computing point0.666667
+Computing point0.6875
+Computing point0.708333
+Computing point0.729167
+We are in partition number 6
+Partition begin: 0.75
+Partition end: 0.875
+Computing point0.770833
+Computing point0.791667
+Computing point0.8125
+Computing point0.833333
+Computing point0.854167
+We are in partition number 7
+Partition begin: 0.875
+Partition end: 1
+Computing point0.895833
+Computing point0.916667
 Computing point0.9375
-Computing point1
+Computing point0.958333
+Computing point0.979167
+

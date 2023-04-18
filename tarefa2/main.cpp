@@ -3,7 +3,7 @@
 
 int main(){
 
-    Newton_Cotes nc = Newton_Cotes(0,1,4,10e-6,CLOSED);
-    std::cout<< nc.computeClosed()<<std::endl;
+    Newton_Cotes nc = Newton_Cotes(0,1,4,10e-6,OPEN);
+    std::cout<< nc.computeOpen()<<std::endl;
     return 1;
 }
