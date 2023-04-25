@@ -4,8 +4,8 @@
 #include "gaussLegendre.h"
 
 int main(){
-    NewtonCotesClosed * nc = new NewtonCotesClosed(0,1,2,10e-6);
-    PartitionCompute * p = new PartitionCompute(nc,10e-6);
+    GaussLegendre * gl = new GaussLegendre(0,1,7,10e-6);
+    PartitionCompute * p = new PartitionCompute(gl,10e-6);
     std::cout<< p->pCompute() << std::endl;
     return 1;
 }

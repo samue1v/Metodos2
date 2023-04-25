@@ -2,23 +2,26 @@ We are currently working on 1 partitions.
 We are in partition number 0
 Partition begin: 0
 Partition end: 1
-Computing point0
-Computing point0.5
-Computing point1
+Computing point0.0694318
+Computing point0.330009
+Computing point0.669991
+Computing point0.930568
 Result: 0.333333
 
 We are currently working on 2 partitions.
 We are in partition number 0
 Partition begin: 0
 Partition end: 0.5
-Computing point0
-Computing point0.25
-Computing point0.5
+Computing point0.0347159
+Computing point0.165005
+Computing point0.334995
+Computing point0.465284
 We are in partition number 1
 Partition begin: 0.5
 Partition end: 1
-Computing point0.5
-Computing point0.75
-Computing point1
+Computing point0.534716
+Computing point0.665005
+Computing point0.834995
+Computing point0.965284
 Result: 0.333333
 
