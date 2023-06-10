@@ -14,9 +14,9 @@ class Method{
         double __xf;
         double __precision;
         int __degree;
+        double (*__func)(double);
 
     public:
-        virtual double func(double x) = 0;
         virtual double step(int stepCount, int partitionNum,std::ofstream & Log) = 0;
 
 };

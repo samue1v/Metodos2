@@ -9,8 +9,7 @@ class NewtonCotesOpen : public Method{
     public:
         NewtonCotesOpen();
         ~NewtonCotesOpen() = default;
-        NewtonCotesOpen(double xi, double xf,int degree,double precision);
-        double (*func)(double);
+        NewtonCotesOpen(double xi, double xf,int degree,double precision,double (*func)(double));
         double step(int stepCount, int partitionNum,std::ofstream & Log);
         
         

@@ -1,6 +1,7 @@
 #ifndef PARTITION_COMPUTE_H
 #define PARTITION_COMPUTE_H
 #include "method.h"
+#include <cmath>
 
 class PartitionCompute{
     public:
@@ -10,6 +11,8 @@ class PartitionCompute{
         PartitionCompute();
         PartitionCompute(Method * method,double precision);
         ~PartitionCompute() = default;
+        bool validateInterval();
+        double computeSingularity();
         double pCompute();
 };
 
@@ -22,7 +25,14 @@ inline PartitionCompute::PartitionCompute(Method * method,double precision){
     __method = method;
 }
 
+bool inline PartitionCompute::validateInterval(){
+    return (std::isnormal(__method->__func(__method->__xi)) && !(std::isinf(__method->__func(__method->__xi))) && !(std::isnan(__method->__func(__method->__xi))) && std::isnormal(__method->__func(__method->__func(__method->__xf))) && !(std::isinf(__method->__func(__method->__xf))) && !(std::isnan(__method->__func(__method->__xf))));
+}
+
 double inline PartitionCompute::pCompute(){
+    if(!validateInterval()){
+
+    }
     std::ofstream Log("log.txt");
     int partitions = 0;
     int counter = 0;
@@ -43,4 +53,9 @@ double inline PartitionCompute::pCompute(){
     return current_res;
 }
 
+double inline PartitionCompute::computeSingularity()
+{(__method->__xi + __method->__xf + (__method->__xf-__method->__xi)* tanh(M_PI/2.0 * sinh(s)))/2.0
+    double fxs = __method->__func([](double s){});
+    (__method->__func) = [](double s){ return __tempfunc(s); };
+}
 #endif

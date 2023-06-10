@@ -9,8 +9,7 @@ class NewtonCotesClosed : public Method{
     public:
         NewtonCotesClosed();
         ~NewtonCotesClosed() = default;
-        NewtonCotesClosed(double xi, double xf,int degree,double precision);
-        double (*func)(double);
+        NewtonCotesClosed(double xi, double xf,int degree,double precision,double (*func)(double));
         double step(int stepCount, int partitionNum,std::ofstream & Log);
         
         

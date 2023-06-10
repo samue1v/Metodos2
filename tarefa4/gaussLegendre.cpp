@@ -4,6 +4,7 @@ GaussLegendre::GaussLegendre(){
     __degree = 0;
     __precision = 0;
     __numPoints = (__degree+1)/2;
+    __func = nullptr;
     //coefs = w
     switch (__numPoints)
     {
@@ -28,6 +29,7 @@ GaussLegendre::GaussLegendre(double xi, double xf,int degree,double precision,do
     __degree = degree;
     __precision = precision;
     __numPoints = (__degree+1) % 2==0 ? (__degree+1)/2 : (__degree+1)/2 + 1;
+    __func = func;
     switch (__numPoints)
     {
     case 2:
@@ -59,7 +61,7 @@ double GaussLegendre::step(int stepCount, int partitionNum,std::ofstream & Log){
     for(int v = 0;v<__numPoints;v++){
         xalpha = (middle+h*__alphas[v]);
         Log<<"Computing point" << xalpha << std::endl;
-        sum = sum + func(xalpha)*__coefs[v];
+        sum = sum + __func(xalpha)*__coefs[v];
     }
     //h não possui coef em Gauss Legendre
     sum = sum*h; // * __coefs[0];

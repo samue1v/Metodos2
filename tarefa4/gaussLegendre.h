@@ -11,7 +11,6 @@ class GaussLegendre : public Method{
         GaussLegendre();
         ~GaussLegendre() = default;
         GaussLegendre(double xi, double xf,int degree,double precision,double (*func)(double));
-        double (*func)(double);
         double step(int stepCount, int partitionNum,std::ofstream & Log);
         
         
