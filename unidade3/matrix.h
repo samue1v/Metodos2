@@ -1,7 +1,6 @@
 #ifndef MATRIX_H
 #define MATRIX_H
-#include "vec3.h"
-#include "../Misc/global.h"
+#include "global.h"
 #include <iostream>
 #include <math.h>
 #include <vector>
@@ -169,17 +168,67 @@ inline Matrix<T,n,m> Matrix<T,n,m>::transpose() const {
 
 template <class T,int n,int m>
 inline double Matrix<T,n,m>::det() const{
-    throw std::exception("This Matrix does not support determinant.\n");
+    if(m!=n){
+        throw std::runtime_error("This Matrix does not support determinant.\n");
+    }
+    double result = 0;
+    int sign = 1;
+    for(int i = 0; i < m; i++) {
+
+        //Submatrix construction
+        Matrix<double,n-1,m-1> subm(std::vector<double>((n-1)*(m-1),0));
+        for(int l = 1; l < m; l++) {
+            int z = 0;
+            for(int k = 0; k < n; k++) {
+                if(k != i) {
+                    subm(l-1,z) = __matrix[l*m+k];
+                    z++;
+                }
+            }
+        }
+
+        //recursive call
+        result = result + sign * __matrix[i] * subm.det();
+        sign = -sign;
+    }
+
+    return result;
 }
 
 template <class T,int n,int m>
 inline Matrix<T,n,m> Matrix<T,n,m>::cof() const{
-    throw std::exception("This Matrix does not support determinant.\n");
+    std::vector<double>v(m*n,0);
+    int line,column,z;
+    for(int i=0;i<m*n;i++){
+        line = i/m;
+        column = i%n;
+        Matrix<double,m-1,n-1> sub;
+        z=0;
+        //Constructing submatrix
+        for(int j=0;j<m*n;j++){
+            if(j/m!=line && j%n!=column){
+                sub(z++) = (__matrix[j]);
+            }
+        }
+
+        v[i] = sub.det()*pow(-1,line+1+column+1);
+    }
+    return Matrix<double,m,n>(std::move(v));
 }
 
 template <class T,int n,int m>
 inline Matrix<T,n,m> Matrix<T,n,m>::inverse() const{
-    throw std::exception("This Matrix does not support determinant.\n");
+    if(m!=n){
+        throw std::runtime_error("This Matrix does not support determinant.\n");
+    }
+    double d = this->det();
+    if (isReallySmall(d)){
+        throw std::runtime_error("Determinant 0 on inverse");
+    }
+    Matrix<double,m,n> t = this->transpose();
+    Matrix<double,m,n> c = t.cof();
+    
+    return c/d;
 }
 
 
