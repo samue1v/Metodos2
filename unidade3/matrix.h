@@ -3,6 +3,7 @@
 #include "vec3.h"
 #include "../Misc/global.h"
 #include <iostream>
+#include <math.h>
 #include <vector>
 #include <stdexcept>
 
