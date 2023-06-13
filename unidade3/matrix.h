@@ -18,7 +18,7 @@ class Matrix{
 
         Matrix& operator =(const Matrix&) = delete;
         Matrix& operator =(Matrix && v){
-            __matrix = v;
+            __matrix = v.__matrix;
             return *this;
         }
 
