@@ -6,12 +6,12 @@
 #include <vector>
 #include <stdexcept>
 
-template <class T,int n, int m>
+template <class T,int m, int n>
 class Matrix{
     public:
         Matrix();
         Matrix(std::vector<T>&& v);
-        Matrix(Matrix<T,n,m> && matrix);
+        Matrix(Matrix<T,m,n> && matrix);
         Matrix(const std::vector<T>& v) = delete;
         Matrix(const Matrix<T,m,n> &) = delete;
 
@@ -56,21 +56,21 @@ class Matrix{
 
 
         template <int l,int k>
-        Matrix<T,n,k> operator *(const Matrix<T,l,k> & other){
-            if(m != l){
+        Matrix<T,m,k> operator *(const Matrix<T,l,k> & other){
+            if(n != l){
                 throw std::runtime_error("Trying to multiply uncompatible matrixes.\n");
             }
-            std::vector<T> nm(n*k,0);
-            for(int i =0;i<n;i++){
+            std::vector<T> nm(m*k,0);
+            for(int i =0;i<m;i++){
                 for(int j = 0;j<k;j++){
                     T sum = 0;
-                    for(int s = 0;s<m;s++){
+                    for(int s = 0;s<n;s++){
                         sum = sum + (__matrix[i*n+s]*other(s,j));
                     }
-                    isReallySmall(sum) ? nm[i*n+j] = 0 : nm[i*n+j] = sum;
+                    isReallySmall(sum) ? nm[i*k+j] = 0 : nm[i*k+j] = sum;
                 }
             }
-            return Matrix<T,n,k>(std::move(nm));
+            return Matrix<T,m,k>(std::move(nm));
         }
 
         Matrix operator/(T f){
@@ -102,9 +102,7 @@ class Matrix{
                 if(i%n == 0){
                     out << "\n";
                 }
-                line = i/n;
-                col = (i)%n;
-                out<<ma(line,col)<<" ";
+                out<<ma(i)<<" ";
             }
             out<<"\n";
             return out;
@@ -113,7 +111,7 @@ class Matrix{
         //Methods signature
 
 
-        Matrix transpose () const ;
+        Matrix<T,n,m> transpose () const ;
 
         
         Matrix inverse  () const ;
@@ -128,29 +126,29 @@ class Matrix{
     
 };
 
-template <class T,int n, int m>
-inline Matrix<T,n,m>::Matrix(){
+template <class T,int m, int n>
+inline Matrix<T,m,n>::Matrix(){
     __matrix.reserve(n*m);
 }
 
-template <class T,int n,int m>
-inline Matrix<T,n,m>::Matrix(std::vector<T>&& v){
+template <class T,int m,int n>
+inline Matrix<T,m,n>::Matrix(std::vector<T>&& v){
     __matrix = v;
 }
 
-template <class T,int n,int m>
-inline Matrix<T,n,m>::Matrix(Matrix<T,n,m>&& ma){
+template <class T,int m,int n>
+inline Matrix<T,m,n>::Matrix(Matrix<T,m,n>&& ma){
     __matrix = ma.__matrix;
 }
 
-template <class T,int n,int m>
-inline Matrix<T,n,m> Matrix<T,n,m>::transpose() const {
-    if(n!=m){
-        throw std::runtime_error("Matrix is not quadratic");
-    }
+template <class T,int m,int n>
+inline Matrix<T,n,m> Matrix<T,m,n>::transpose() const {
 
-    if(n==1){
-        return Matrix(std::vector<T>(1,__matrix[0]));
+    if(m==1 || n==1){
+        std::vector<T> v;
+        v.reserve(n*m);
+        v = __matrix;
+        return Matrix<T,n,m>(std::move(v));
     }
 
     
@@ -160,7 +158,7 @@ inline Matrix<T,n,m> Matrix<T,n,m>::transpose() const {
     for(int i = 0; i < n*m;i++){
         line = i/n;
         col = (i)%n;
-        v.insert(v.begin()+i,__matrix[col*n+line]);
+        v[(col*m+line)] = __matrix[line*n+col];
     }
     return Matrix<T,n,m>(std::move(v));
 }

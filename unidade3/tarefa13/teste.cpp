@@ -4,14 +4,12 @@
 #include "hh.h"
 int main(){
 
-    Matrix<double,3,3> m = std::vector<double>({1,2,3,1,2,3,1,2,3});
-    Matrix<double,3,3> n;
-    Matrix<double,2,2> a = std::vector<double>({1,2,1,2});
-    Matrix<double,2,2> b;
+    Matrix<double,3,2> m = std::vector<double>({1,2,3,4,5,6});
+    Matrix<double,2,3> n = std::vector<double>({4,5,6,4,5,6});
     HouseHolder hh;
-    hh.tridiagonalize(m,n);
-    hh.tridiagonalize(a,b);
+    //hh.tridiagonalize(m,n);
+    //hh.tridiagonalize(a,b);
     //n = m.transpose();
-    std::cout<<b;
+    std::cout<<m.transpose();
     return 1;
 }
