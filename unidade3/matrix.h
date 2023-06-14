@@ -17,7 +17,12 @@ class Matrix{
         Matrix(const Matrix<T,m,n> &) = delete;
 
 
-        Matrix& operator =(const Matrix&) = delete;
+        Matrix& operator =(const Matrix& other){
+            for(int i = 0;i<n*m;i++){
+                __matrix[i] = other(i);
+            }
+            return *this;
+        }
 
         Matrix& operator =(Matrix && v){
             __matrix = v.__matrix;
@@ -41,7 +46,7 @@ class Matrix{
         }
 
         Matrix operator +(Matrix other){
-            std::vector<double> v;
+            std::vector<T> v;
             for(int i = 0;i< n*m;i++){
                 v.push_back(__matrix[i] + other(i));
             }
@@ -87,7 +92,7 @@ class Matrix{
                 }
 
             }
-            return Matrix<T,n,m>(std::move(v));
+            return Matrix<T,m,n>(std::move(v));
         }
 
         Matrix operator*(T f){
@@ -95,7 +100,7 @@ class Matrix{
             for(auto i : __matrix){
                 v.push_back(i*f);
             }
-            return Matrix<T,n,m>(std::move(v));
+            return Matrix<T,m,n>(std::move(v));
         }
 
         friend std::ostream& operator<<(std::ostream &out,const Matrix& ma) {
@@ -115,7 +120,10 @@ class Matrix{
 
         Matrix<T,n,m> transpose () const ;
 
-        
+        Matrix<T,m,1> getIthColumn(int i) const;
+
+        Matrix<T,m,1> getIthColumnZeroAbove(int i) const;
+
         Matrix inverse  () const ;
 
         double det () const;
@@ -127,6 +135,14 @@ class Matrix{
         int countCols () const;
 
         int size () const;
+
+        double norm () const;
+
+        Matrix<T,m,n> normalize () const;
+
+        Matrix<T,m,n> scale () const;
+
+        
 
     private:
         std::vector<T> __matrix;
@@ -179,6 +195,32 @@ inline int Matrix<T,m,n>::size() const{
     return __matrix.size();
 }
 
+template <class T,int m, int n>
+inline double Matrix<T,m,n>::norm () const{
+    double sum = 0;
+    for(int i = 0;i<m*n;i++){
+        sum+=__matrix[i]*__matrix[i];
+    }
+    return sqrt(sum);
+}
+
+template <class T,int m, int n>
+inline Matrix<T,m,n> Matrix<T,m,n>::normalize () const{
+    return this/this->norm();
+}
+
+template <class T,int m, int n>
+inline Matrix<T,m,n> Matrix<T,m,n>::scale () const{
+    Matrix<T,m,n> scaled;
+    scaled = *this;
+    T max = -INFINITY;
+    for(int i=0;i<m*n;i++){
+        max = std::abs(__matrix[i]) > max ? std::abs(__matrix[i]) : max;
+    }
+    return scaled/max;
+
+}
+
 template <class T,int m,int n>
 inline Matrix<T,n,m> Matrix<T,m,n>::transpose() const {
 
@@ -200,9 +242,30 @@ inline Matrix<T,n,m> Matrix<T,m,n>::transpose() const {
         col = (i)%n;
         v[(col*m+line)] = __matrix[line*n+col];
     }
-    std::cout<<"vsize: " << v.size()<<std::endl;
     return Matrix<T,n,m>(std::move(v));
 }
+
+ template<class T,int m,int n>
+ inline Matrix<T,m,1> Matrix<T,m,n>::getIthColumn(int i) const{
+    Matrix<T,m,1> columnMatrix;
+    int count=0;
+    for(int j = i;j<m*n;j+=n){
+        columnMatrix(count) = __matrix[j];
+        count++;
+    }
+    return columnMatrix;
+ }
+
+  template<class T,int m,int n>
+ inline Matrix<T,m,1> Matrix<T,m,n>::getIthColumnZeroAbove(int i) const{
+    Matrix<T,m,1> columnMatrix(0);
+    int count=i;
+    for(int j = i+n*i;j<m*n;j+=n){
+        columnMatrix(count) = __matrix[j];
+        count++;
+    }
+    return columnMatrix;
+ }
 
 
 template <class T,int n,int m>
@@ -411,6 +474,14 @@ inline Matrix<double,4,4> Matrix<double,4,4>::inverse() const{
     return c/d;
 }
 
+//Useful functions that use Matrix but are not part of it
+
+template<class T,int m>
+ Matrix<T,m,1> getCanonicalEi(int i){
+    Matrix<T,m,1> ei(0);
+    ei(i) = 1;
+    return ei;
+ }
 
 
 
