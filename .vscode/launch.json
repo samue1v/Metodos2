@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/dejiko/Repositories/ufc/Metodos2/unidade3/tarefa10",
-      "program": "/home/dejiko/Repositories/ufc/Metodos2/unidade3/tarefa10/build/Debug/outDebug",
+      "cwd": "/home/galeg0/Documents/Metodos2/unidade3/tarefa13",
+      "program": "/home/galeg0/Documents/Metodos2/unidade3/tarefa13/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

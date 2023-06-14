@@ -10,6 +10,7 @@ template <class T,int m, int n>
 class Matrix{
     public:
         Matrix();
+        Matrix(T i);
         Matrix(std::vector<T>&& v);
         Matrix(Matrix<T,m,n> && matrix);
         Matrix(const std::vector<T>& v) = delete;
@@ -17,6 +18,7 @@ class Matrix{
 
 
         Matrix& operator =(const Matrix&) = delete;
+
         Matrix& operator =(Matrix && v){
             __matrix = v.__matrix;
             return *this;
@@ -120,6 +122,12 @@ class Matrix{
 
         Matrix cof () const;
 
+        int countLines () const;
+         
+        int countCols () const;
+
+        int size () const;
+
     private:
         std::vector<T> __matrix;
         
@@ -129,6 +137,21 @@ class Matrix{
 template <class T,int m, int n>
 inline Matrix<T,m,n>::Matrix(){
     __matrix.reserve(n*m);
+    __matrix.resize(m*n);
+    int l,c;
+    for(int i = 0;i<m*n;i++){
+        l = i/n;
+        c = i%n;
+        __matrix[l*n+c] = l==c ? 1 : 0;
+    }
+}
+
+template <class T,int m, int n>
+inline Matrix<T,m,n>::Matrix(T i){
+    __matrix.reserve(n*m);
+    __matrix.resize(m*n);
+    int l,c;
+    std::fill(__matrix.begin(),__matrix.end(),i);
 }
 
 template <class T,int m,int n>
@@ -141,12 +164,28 @@ inline Matrix<T,m,n>::Matrix(Matrix<T,m,n>&& ma){
     __matrix = ma.__matrix;
 }
 
+template <class T,int m, int n>
+inline int Matrix<T,m,n>::countLines() const{
+    return m;
+}
+
+template <class T,int m, int n>
+inline int Matrix<T,m,n>::countCols() const{
+    return n;
+}
+
+template <class T,int m, int n>
+inline int Matrix<T,m,n>::size() const{
+    return __matrix.size();
+}
+
 template <class T,int m,int n>
 inline Matrix<T,n,m> Matrix<T,m,n>::transpose() const {
 
     if(m==1 || n==1){
         std::vector<T> v;
         v.reserve(n*m);
+        v.resize(n*m);
         v = __matrix;
         return Matrix<T,n,m>(std::move(v));
     }
@@ -154,12 +193,14 @@ inline Matrix<T,n,m> Matrix<T,m,n>::transpose() const {
     
     std::vector<T> v;
     v.reserve(n*m);
+    v.resize(n*m);
     int line,col;
     for(int i = 0; i < n*m;i++){
         line = i/n;
         col = (i)%n;
         v[(col*m+line)] = __matrix[line*n+col];
     }
+    std::cout<<"vsize: " << v.size()<<std::endl;
     return Matrix<T,n,m>(std::move(v));
 }
 

@@ -10,6 +10,8 @@ int main(){
     //hh.tridiagonalize(m,n);
     //hh.tridiagonalize(a,b);
     //n = m.transpose();
-    std::cout<<m.transpose();
+    
+    //std::cout<<m*m.transpose();
+    std::cout<<Matrix<double,3,5>(1).size();
     return 1;
 }
