@@ -124,6 +124,8 @@ class Matrix{
 
         Matrix<T,m,1> getIthColumnZeroAbove(int i) const;
 
+        Matrix<T,m,n> completeDiagonal (int i) const;
+
         Matrix inverse  () const ;
 
         double det () const;
@@ -137,6 +139,10 @@ class Matrix{
         int size () const;
 
         double norm () const;
+
+        bool isDiagonal() const;
+
+        
 
         Matrix<T,m,n> normalize () const;
 
@@ -196,6 +202,22 @@ inline int Matrix<T,m,n>::size() const{
 }
 
 template <class T,int m, int n>
+inline bool Matrix<T,m,n>::isDiagonal() const{
+    int line,column;
+    double sum = 0;
+    for(int i = 0;i<m*n;i++){
+        line = i/n;
+        column = i%n;
+        sum = line!=column ? sum + std::abs(__matrix[i]) : sum+0;
+    }
+    std::cout<<sum<<std::endl;
+    if(sum<1e-10){
+        return true;
+    }
+    return false;
+}
+
+template <class T,int m, int n>
 inline double Matrix<T,m,n>::norm () const{
     double sum = 0;
     for(int i = 0;i<m*n;i++){
@@ -219,6 +241,16 @@ inline Matrix<T,m,n> Matrix<T,m,n>::scale () const{
     }
     return scaled/max;
 
+}
+
+template <class T,int m, int n>
+inline Matrix<T,m,n> Matrix<T,m,n>::completeDiagonal(int i) const{
+    Matrix<T,m,n> temp;
+    temp = *this;
+    for(int j=0;j<i;j++){
+        temp(j*n+j) = 1;
+    }
+    return temp;
 }
 
 template <class T,int m,int n>
@@ -483,7 +515,20 @@ template<class T,int m>
     return ei;
  }
 
+template<class T,int m,int n>
+ Matrix<T,m,n> getIdentity(){
+    Matrix<T,m,n> i;
+    return i;
+ }
 
+ template<class T,int m,int n>
+ Matrix<T,m,n> getIdentitySubMatrix(int i){
+    Matrix<T,m,n> sub(0);
+    for(int j = i*n+i;j<m*n;j+=n+1){
+        sub(j) = 1;
+    }
+    return sub;
+ }
 
 
 using Matrix3d = Matrix<double,3,3>;
