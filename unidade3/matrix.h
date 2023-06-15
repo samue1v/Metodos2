@@ -148,7 +148,7 @@ class Matrix{
 
         Matrix<T,m,n> scale () const;
 
-        
+        //Matrix<T,m,n> map (double (*func) (double)) const;
 
     private:
         std::vector<T> __matrix;
@@ -530,6 +530,16 @@ template<class T,int m,int n>
     return sub;
  }
 
+//  template<class T,int m,int n>
+//  inline Matrix<T,m,n> Matrix<T,m,n>::map(double (*func) (double))const {
+//     std::vector<double> v = __matrix;
+//     //v.reserve(m*n);
+//     //v.resize(m*n);
+//     for(int i=0;i<m*n;i++){
+//         v[i] = func(v[i]);
+//     }
+//     return Matrix<T,m,n>(std::move(v));
+//  }
 
 using Matrix3d = Matrix<double,3,3>;
 using Matrix4d = Matrix<double,4,4>;

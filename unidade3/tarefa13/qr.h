@@ -4,6 +4,8 @@
 
 class QR{
     public:
+    QR(){}
+    ~QR(){}
     //aqui deveria ser passado um método genérico(hh,jarbis...), mas por questão de tempo, será somente hh mesmo.
     QR(const HouseHolder & hh){
         __hh = hh;
