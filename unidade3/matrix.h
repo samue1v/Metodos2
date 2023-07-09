@@ -13,8 +13,9 @@ class Matrix{
         Matrix(T i);
         Matrix(std::vector<T>&& v);
         Matrix(Matrix<T,m,n> && matrix);
-        Matrix(const std::vector<T>& v) = delete;
-        Matrix(const Matrix<T,m,n> &) = delete;
+        Matrix(const std::vector<T>& v);
+        Matrix(const Matrix<T,m,n> &);
+
 
 
         Matrix& operator =(const Matrix& other){
@@ -49,6 +50,22 @@ class Matrix{
             std::vector<T> v;
             for(int i = 0;i< n*m;i++){
                 v.push_back(__matrix[i] + other(i));
+            }
+            return Matrix(std::move(v));
+        }
+
+        Matrix operator +(double scalar){
+            std::vector<T> v;
+            for(int i = 0;i< n*m;i++){
+                v.push_back(__matrix[i] + scalar);
+            }
+            return Matrix(std::move(v));
+        }
+
+        Matrix operator /(Matrix other){
+            std::vector<T> v;
+            for(int i = 0;i< n*m;i++){
+                v.push_back(__matrix[i] / other(i));
             }
             return Matrix(std::move(v));
         }
@@ -142,19 +159,31 @@ class Matrix{
 
         bool isDiagonal() const;
 
-        
+        double max () const; 
 
         Matrix<T,m,n> normalize () const;
 
         Matrix<T,m,n> scale () const;
 
+        Matrix<T,m,n> abs () const;
+
         //Matrix<T,m,n> map (double (*func) (double)) const;
 
-    private:
+    // private:
         std::vector<T> __matrix;
         
     
 };
+template <class T,int m, int n>
+Matrix<T,m,n>::Matrix(const std::vector<T>& v){
+    __matrix = v;
+}
+
+template <class T,int m, int n>
+Matrix<T,m,n>::Matrix(const Matrix<T,m,n> & mat){
+    __matrix = mat.__matrix;
+}
+
 
 template <class T,int m, int n>
 inline Matrix<T,m,n>::Matrix(){
@@ -540,6 +569,29 @@ template<class T,int m,int n>
 //     }
 //     return Matrix<T,m,n>(std::move(v));
 //  }
+
+template <class T,int m,int n>
+inline Matrix<T,m,n> Matrix<T,m,n>::abs() const{
+    std::vector<double> v = __matrix;
+    //v.reserve(m*n);
+    //v.resize(m*n);
+    for(int i=0;i<m*n;i++){
+        v[i] = std::abs(v[i]);
+    }
+    return Matrix<T,m,n>(std::move(v));
+ }
+
+template <class T,int m,int n>
+inline double Matrix<T,m,n>::max() const{
+    std::vector<double> v = __matrix;
+    //v.reserve(m*n);
+    //v.resize(m*n);
+    double max = v[0];
+    for(int i=1;i<m*n;i++){
+        max = max<v[i] ? v[i] : max;
+    }
+    return max;
+ }
 
 using Matrix3d = Matrix<double,3,3>;
 using Matrix4d = Matrix<double,4,4>;
