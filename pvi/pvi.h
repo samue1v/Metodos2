@@ -113,32 +113,42 @@ void PVI::solveRungeKuttaExplicit2ndOrder(double t){
 
 void PVI::solvePredictorCorrector2ndOrder(double t){
     PVI rkPVI = PVI(getDeltaT(), solutions[0]);
-    int intervals = t/dt + 1;
+    int intervals = t/dt;
     Matrix<double,2,1>funcRes;
     Matrix<double,2,1>funcRes_plus_one;
     Matrix<double,2,1>funcRes_minus_one;
-    Matrix<double,2,1>funcRes_plus_one_bar;
     rkPVI.solveRungeKuttaExplicit2ndOrder(dt);
-    rkPVI.getSolutions(solutions); // S0 e S1
-    Matrix<double,2,1> Si_minus_1 = solutions[1];
+    std::vector<Matrix<double,2,1>>solRK;
+    rkPVI.getSolutions(solRK); // S0 e S1
+    solutions.push_back(solRK[1]);
     Matrix<double,2,1> Si_plus_1_bar;
-    Matrix<double,2,1> Si = solutions[0];
     Matrix<double,2,1> Si_plus_1;
-    Matrix<double,2,1> Si_plus_1_new;
+    Matrix<double,2,1> Si_plus_1_old;
+    int maxIterations = 100;
+    int iter = 0;
+    double tolerance = 1e-6;
+    Matrix<double,2,1> deltaS;
     for(int i=1;i<=intervals;i++){
+        Matrix<double,2,1> Si = solutions[i];
+        Matrix<double,2,1> Si_minus_1 = solutions[i-1];
         exampleFunction(funcRes_minus_one, Si_minus_1,i*dt);
-        exampleFunction(funcRes_plus_one_bar, Si,i*dt);
-        Si_plus_1_bar = Si + ((funcRes_minus_one)*-1. + funcRes*3.*dt)/2.;
-        
-        int maxIterations = 100;
-        int iter = 0;
-        double tolerance = 1e-6;
-        while (/* condition */&& iter < maxIterations) 
+        exampleFunction(funcRes, Si,i*dt);
+        Si_plus_1_bar = Si + ((funcRes_minus_one)*-1. + (funcRes*3.))*dt/2.;
+        Si_plus_1_old = Si_plus_1_bar;
+        Si_plus_1 = Si_plus_1_bar;
+        iter=0;
+        Matrix<double,2,1> error = std::vector<double>({1., 1.});
+        while (error.max() > tolerance && iter < maxIterations) 
         {
-            /* code */
+            exampleFunction(funcRes_plus_one, Si_plus_1, i*dt);
+            Si_plus_1 = Si + ((funcRes)+(funcRes_plus_one))*dt/2.;
+            deltaS = (Si_plus_1 - Si_plus_1_old)/Si_plus_1_old;
+            error = deltaS.abs();
+            Si_plus_1_old = Si_plus_1;
             iter++;
         }
-        
+        std::cout << "iter: "<<iter<<std::endl;
+        solutions.push_back(Si_plus_1);
     }
 }
 

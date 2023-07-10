@@ -15,7 +15,7 @@ class Matrix{
         Matrix(Matrix<T,m,n> && matrix);
         Matrix(const std::vector<T>& v);
         Matrix(const Matrix<T,m,n> &);
-
+        ~Matrix() = default;
 
 
         Matrix& operator =(const Matrix& other){
@@ -167,11 +167,19 @@ class Matrix{
 
         Matrix<T,m,n> abs () const;
 
+        // LU Decomposition
+        Matrix<T, m, n> luDecomposition() const;
+
+        // Swap rows
+        void swapRows(int row1, int row2);
+
+        Matrix<T, m, 1> solveLinearSystem(const Matrix<T, m, 1>& b) const;
+
         //Matrix<T,m,n> map (double (*func) (double)) const;
 
     // private:
         std::vector<T> __matrix;
-        
+        std::vector<int> permutation;
     
 };
 template <class T,int m, int n>
@@ -239,8 +247,8 @@ inline bool Matrix<T,m,n>::isDiagonal() const{
         column = i%n;
         sum = line!=column ? sum + std::abs(__matrix[i]) : sum+0;
     }
-    std::cout<<sum<<std::endl;
-    if(sum<1e-10){
+    //std::cout<<sum<<std::endl;
+    if(sum<1e-3){
         return true;
     }
     return false;
@@ -592,6 +600,93 @@ inline double Matrix<T,m,n>::max() const{
     }
     return max;
  }
+
+// LU Decomposition
+template <class T, int m, int n>
+Matrix<T, m, n> Matrix<T, m, n>::luDecomposition() const {
+    if (m != n) {
+        throw std::runtime_error("LU decomposition is only applicable to square matrices.");
+    }
+
+    Matrix<T, m, n> LU(*this);
+    Matrix<T, m, n> P;
+    std::vector<int> permutation(m);
+
+    for (int i = 0; i < m; ++i) {
+        permutation[i] = i;
+    }
+
+    for (int k = 0; k < n - 1; ++k) {
+        int pivotRow = k;
+
+        // Find the pivot with the largest absolute value
+        for (int i = k + 1; i < m; ++i) {
+            if (std::abs(LU(i, k)) > std::abs(LU(pivotRow, k))) {
+                pivotRow = i;
+            }
+        }
+
+        // Swap rows in LU and P
+        LU.swapRows(k, pivotRow);
+        P.swapRows(k, pivotRow);
+        std::swap(permutation[k], permutation[pivotRow]);
+
+        T pivot = LU(k, k);
+        if (pivot == 0) {
+            throw std::runtime_error("LU decomposition failed: Matrix is singular.");
+        }
+
+        // Perform elimination
+        for (int i = k + 1; i < m; ++i) {
+            LU(i, k) /= pivot;
+            for (int j = k + 1; j < n; ++j) {
+                LU(i, j) -= LU(i, k) * LU(k, j);
+            }
+        }
+    }
+
+    LU.permutation = permutation;
+    return LU;
+}
+
+// Swap rows
+template <class T, int m, int n>
+void Matrix<T, m, n>::swapRows(int row1, int row2) {
+    for (int j = 0; j < n; ++j) {
+        std::swap((*this)(row1, j), (*this)(row2, j));
+    }
+}
+
+// Linear system solver using LU decomposition
+template <class T, int m, int n>
+Matrix<T, m, 1> Matrix<T, m, n>::solveLinearSystem(const Matrix<T, m, 1>& b) const {
+    if (m != n) {
+        throw std::runtime_error("Linear system solver is only applicable to square matrices.");
+    }
+
+    Matrix<T, m, n> LU = luDecomposition();
+
+    // Solve Ly = Pb using forward substitution
+    Matrix<T, m, 1> y;
+    for (int i = 0; i < m; ++i) {
+        y(i) = b(LU.permutation[i]);
+        for (int j = 0; j < i; ++j) {
+            y(i) -= LU(i, j) * y(j);
+        }
+    }
+
+    // Solve Ux = y using backward substitution
+    Matrix<T, m, 1> x;
+    for (int i = m - 1; i >= 0; --i) {
+        x(i) = y(i);
+        for (int j = i + 1; j < n; ++j) {
+            x(i) -= LU(i, j) * x(j);
+        }
+        x(i) /= LU(i, i);
+    }
+
+    return x;
+}
 
 using Matrix3d = Matrix<double,3,3>;
 using Matrix4d = Matrix<double,4,4>;
