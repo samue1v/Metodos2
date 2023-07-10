@@ -20,6 +20,7 @@ class PVI{
         void solveEulerExplicit(double t);
         void solveEulerImplicit(double t);
         void solveRungeKuttaExplicit2ndOrder(double t);
+        void solvePredictorCorrector2ndOrder(double t);
         void getSolutions(std::vector<Matrix<double,2,1>> & solutions);
         double getDeltaT();
 
@@ -95,7 +96,6 @@ void PVI::solveRungeKuttaExplicit2ndOrder(double t){
     Matrix<double,2,1> Si_plus_1_bar;
     PVI eulerPVI = PVI(getDeltaT(), solutions[0]);
     int intervals = t/dt + 1;
-    Matrix<double,2,1> res;
     Matrix<double,2,1>funcRes;
     Matrix<double,2,1>funcRes_bar;
     for(int i=1;i<=intervals;i++){
@@ -108,6 +108,37 @@ void PVI::solveRungeKuttaExplicit2ndOrder(double t){
         exampleFunction(funcRes_bar,Si_plus_1_bar,i*dt);
         auto Si_plus_1 = Si + (funcRes+funcRes_bar)*dt*1/2;
         solutions.push_back(Si_plus_1);
+    }
+}
+
+void PVI::solvePredictorCorrector2ndOrder(double t){
+    PVI rkPVI = PVI(getDeltaT(), solutions[0]);
+    int intervals = t/dt + 1;
+    Matrix<double,2,1>funcRes;
+    Matrix<double,2,1>funcRes_plus_one;
+    Matrix<double,2,1>funcRes_minus_one;
+    Matrix<double,2,1>funcRes_plus_one_bar;
+    rkPVI.solveRungeKuttaExplicit2ndOrder(dt);
+    rkPVI.getSolutions(solutions); // S0 e S1
+    Matrix<double,2,1> Si_minus_1 = solutions[1];
+    Matrix<double,2,1> Si_plus_1_bar;
+    Matrix<double,2,1> Si = solutions[0];
+    Matrix<double,2,1> Si_plus_1;
+    Matrix<double,2,1> Si_plus_1_new;
+    for(int i=1;i<=intervals;i++){
+        exampleFunction(funcRes_minus_one, Si_minus_1,i*dt);
+        exampleFunction(funcRes_plus_one_bar, Si,i*dt);
+        Si_plus_1_bar = Si + ((funcRes_minus_one)*-1. + funcRes*3.*dt)/2.;
+        
+        int maxIterations = 100;
+        int iter = 0;
+        double tolerance = 1e-6;
+        while (/* condition */&& iter < maxIterations) 
+        {
+            /* code */
+            iter++;
+        }
+        
     }
 }
 
